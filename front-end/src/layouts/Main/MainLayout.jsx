@@ -4,7 +4,7 @@ import { Sidebar } from "@/components";
 import { useSidebar } from "@/hooks";
 
 export const MainLayout = () => {
-    const { toggle, isOpen } = useSidebar(false)
+    const { isOpen, toggle, close } = useSidebar(false)
 
     return (
         <div className="flex">
@@ -12,11 +12,11 @@ export const MainLayout = () => {
             <Sidebar.Root isOpen={isOpen} >
                 <Sidebar.Title text="Help Desk"/>
                 <Sidebar.Dropdown>
-                    <Sidebar.Item to="/" text="Adicionar" />
-                    <Sidebar.Item to="/" text="Editar" />
-                    <Sidebar.Item to="/" text="Excluir" />
+                    <Sidebar.Item to="/Painel" text="Adicionar" onClick={close} />
+                    <Sidebar.Item to="/Painel" text="Editar" onClick={close} />
+                    <Sidebar.Item to="/Painel" text="Excluir" onClick={close} />
                 </Sidebar.Dropdown>
-                <Sidebar.Item to="/" text="Meus Chamados" />
+                <Sidebar.Item to="/Painel" text="Meus Chamados" onClick={close} />
             </Sidebar.Root>
 
             {/* Botão Hamburguer no mobile */}

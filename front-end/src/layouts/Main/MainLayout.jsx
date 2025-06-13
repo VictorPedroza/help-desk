@@ -1,21 +1,38 @@
-import { Outlet } from "react-router-dom"
-import { FaAngleDown } from "react-icons/fa"
+import { Outlet } from "react-router-dom";
+import { FaBars } from "react-icons/fa";
+import { Sidebar } from "@/components";
+import { useSidebar } from "@/hooks";
 
 export const MainLayout = () => {
-    return(
-        <div className="grid grid-cols-[300px_1fr]">
-            <div className="bg-gray-50 p-2 border-r-[1px] border-black/20 shadow min-h-[650px]">
-                <h1 className="text-orange-500 font-bold text-2xl text-center mb-4">Help Desk</h1>
-                <div>
-                    <button className="px-3 py-2 bg-orange-500 text-white w-full flex justify-between rounded-md hover:bg-orange-600 transition-colors">
-                        <p>Abrir Chamado</p>
-                        <FaAngleDown className="w-6 h-6 text-white" />
-                    </button>
-                </div>
+    const { toggle, isOpen } = useSidebar(false)
+
+    return (
+        <div className="flex">
+            {/* Sidebar */}
+            <Sidebar.Root isOpen={isOpen} >
+                <Sidebar.Title text="Help Desk"/>
+                <Sidebar.Dropdown>
+                    <Sidebar.Item to="/" text="Adicionar" />
+                    <Sidebar.Item to="/" text="Editar" />
+                    <Sidebar.Item to="/" text="Excluir" />
+                </Sidebar.Dropdown>
+                <Sidebar.Item to="/" text="Meus Chamados" />
+            </Sidebar.Root>
+
+            {/* Botão Hamburguer no mobile */}
+            <div className="sm:hidden fixed top-4 right-4 z-30">
+                <button 
+                    onClick={toggle}
+                    className="bg-orange-500 text-white p-2 rounded-md shadow-md hover:bg-orange-600 transition-colors"
+                >
+                    <FaBars className="w-6 h-6" />
+                </button>
             </div>
-            <div className="p-2">
+
+            {/* Conteúdo Principal */}
+            <div className="flex-1 p-4 sm:ml-[300px]">
                 <Outlet />
             </div>
         </div>
-    )
-}
+    );
+};

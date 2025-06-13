@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { MainLayout, AuthLayout } from '@/layouts'
+import { Main } from "@/pages"
 
 export const AppRoutes = () => {
     return (
@@ -7,7 +8,8 @@ export const AppRoutes = () => {
             <Routes>
                 <Route path='/' element={<AuthLayout />}>
                 </Route>
-                <Route path='/Painel' element={<MainLayout />}>
+                <Route path='/' element={<MainLayout />}>
+                    <Route path='Painel' element={<Main />} />
                 </Route>
             </Routes>
         </>

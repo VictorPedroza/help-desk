@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const User = require("../userModel")
+const technicalModel = require("./technicalModel")
 
 const applicantModel = new mongoose.Schema({
     department: {
@@ -9,6 +10,11 @@ const applicantModel = new mongoose.Schema({
         type: String,
         default: "applicant"
     }
+})
+
+applicantModel.pre('valitate', function(next) {
+    this.typeUser = "applicant"
+    next()
 })
 
 module.exports = User.discriminator("Applicant", applicantModel)

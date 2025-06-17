@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const connectDB = require("./config/db")
+const User = require("./models/User/types/applicantModel")
 
 app.use(express.json())
 
@@ -11,10 +12,10 @@ app.get("/", (req, res) => {
 })
 
 app.post("/api/auth/register", async (req, res) => {
-    const { name, email, password, typeUser } = req.body;
+    const { name, email, password } = req.body;
 
     // Validação simples
-    if (!name || !email || !password || !typeUser) {
+    if (!name || !email || !password) {
         return res.status(400).json({ message: "Todos os campos são obrigatórios" });
     }
 
@@ -29,8 +30,7 @@ app.post("/api/auth/register", async (req, res) => {
         const user = await User.create({
             name,
             email,
-            password, // ⚠️ Aqui, idealmente, você deveria fazer hash da senha antes de salvar.
-            typeUser,
+            password, 
             status: "active"
         });
 

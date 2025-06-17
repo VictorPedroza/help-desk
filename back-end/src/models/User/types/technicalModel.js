@@ -5,11 +5,12 @@ const technicalModel = new mongoose.Schema({
     availability: {
         type: Boolean,
         required: true
-    },
-    typeUser: {
-        type: String,
-        default: "technical"
-    },
+    }
+})
+
+technicalModel.pre('validate', function (next) {
+    this.typeUser = "technical"
+    next()
 })
 
 module.exports = User.discriminator("Technical", technicalModel)

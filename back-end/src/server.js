@@ -11,6 +11,10 @@ app.get("/", (req, res) => {
     res.send("API is Running")
 })
 
+const Routes = require("./routes")
+
+app.use("/api", Routes);
+
 app.post("/api/auth/register", async (req, res) => {
     const { name, email, password } = req.body;
 

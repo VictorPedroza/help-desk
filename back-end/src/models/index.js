@@ -1,9 +1,11 @@
 const applicantModel = require("./User/types/applicantModel")
 const technicalModel = require("./User/types/technicalModel")
 const adminModel = require("./User/types/adminModel")
+const userModel = require("./User/userModel")
 
 module.exports = {
-    Aplicant: applicantModel, 
+    User: userModel,
+    Applicant: applicantModel, 
     Tchinical: technicalModel, 
     Admin: adminModel 
 }

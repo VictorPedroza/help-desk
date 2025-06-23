@@ -10,7 +10,7 @@ const adminModel = new mongoose.Schema({
 })
 
 adminModel.pre('validate', function (next) {
-    this.typeUser = 'applicant';
+    this.typeUser = 'admin';
     next();
 })
 

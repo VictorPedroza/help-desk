@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config(); // Carrega variáveis do .env
 
-const MONGO_URI = process.env.MONGO_URI;
+const MONGO_URI = process.env.MONGO_URi;
 
 function connectDB() {
     mongoose.connect(MONGO_URI)

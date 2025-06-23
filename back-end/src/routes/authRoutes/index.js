@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const { User, Applicant, Technical, Admin } = require("../../models");
+const { User } = require("../../models");
 const { response, typeError } = require("../../utils");
+const AuthService = require("../../services/auth/authServices")
 
 router.post("/register", async (req, res) => {
-  const { name, email, password, typeUser } = req.body;
+  const { name, email, password, typeUser, ...extraFields } = req.body;
 
   const fields = { name, email, password, typeUser };
   let errors = Object.entries(fields)
-    .filter(([_, value]) => !value)
+    .filter(([_, value]) => !value || (typeof value === "string" && value.trim() === ""))
     .map(([key]) => key);
 
   if (errors.length) {
@@ -28,42 +29,30 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    const userExists = await User.findOne({ email });
-    if (userExists) {
+    const authService = new AuthService;
+    const result = await authService.register({
+      name, 
+      email,
+      password,
+      typeUser,
+      ...extraFields
+    })
+
+    if(result.success === false) {
       return response(res).error({
         typeError: typeError.validationError,
-        errors: ["E-mail já cadastrado"]
-      });
-    }
-
-    const baseData = {
-        name, 
-        email, 
-        password,
-        status: "active"
-    }
-
-    const userFactories = {
-      applicant: (data) => Applicant.create({...data, department: data.department}),
-      technical: (data) => Technical.create({...data, availability: data.availability}),
-      admin: (data) => Admin.create({...data, permissions: data.permissions})
-    }
-
-    const createUser = userFactories[typeUser];
-    if(!createUser) {
-      return response(res).error({
-        typeError: typeError.missingCredentialsError,
-        errors: ["Tipo de usuário inválido"]
+        errors: [result.message]
       })
     }
-    const user = await createUser({...baseData, ...req.body})
+
+    const user = result.data;
 
     return response(res).success({
       message: "Usuário cadastrado",
       data: {
         id: user._id,
         name: user.name,
-        typeUser: typeUser
+        typeUser: user.typeUser
       }
     });
 

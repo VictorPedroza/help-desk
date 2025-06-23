@@ -27,7 +27,6 @@ class AuthService {
         }
 
         const user = await createUser({ ...baseData, ...extraFields });
-        console.log(user)
 
         return { success: true, data: user };
     }

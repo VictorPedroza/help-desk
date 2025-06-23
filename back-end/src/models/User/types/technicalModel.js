@@ -4,7 +4,6 @@ const User = require("../userModel")
 const technicalModel = new mongoose.Schema({
     availability: {
         type: Boolean,
-        required: true,
         default: true
     }
 })

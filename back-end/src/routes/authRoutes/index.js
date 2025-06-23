@@ -14,7 +14,7 @@ router.post("/register", async (req, res) => {
 
   if (errors.length) {
     return response(res).error({
-      typeError: typeError.missingCredentialsError,
+      typeError: typeError.invalidCredentialsError,
       errors
     });
   }
@@ -36,7 +36,6 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    let user;
     const baseData = {
         name, 
         email, 
@@ -44,22 +43,20 @@ router.post("/register", async (req, res) => {
         status: "active"
     }
 
-    switch (typeUser) {
-      case "applicant":
-        const { department } = req.body;
-        user = await Applicant.create({...baseData, department});
-        break;
-
-      case "technical":
-        const { availability } = req.body;
-        user = await Technical.create({...baseData, availability});
-        break;
-
-      case "admin":
-        const { permissions } = req.body;
-        user = await Admin.create({...baseData, permissions});
-        break;
+    const userFactories = {
+      applicant: (data) => Applicant.create({...data, department: data.department}),
+      technical: (data) => Technical.create({...data, availability: data.availability}),
+      admin: (data) => Admin.create({...data, permissions: data.permissions})
     }
+
+    const createUser = userFactories[typeUser];
+    if(!createUser) {
+      return response(res).error({
+        typeError: typeError.missingCredentialsError,
+        errors: ["Tipo de usuário inválido"]
+      })
+    }
+    const user = await createUser({...baseData, ...req.body})
 
     return response(res).success({
       message: "Usuário cadastrado",

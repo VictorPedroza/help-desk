@@ -6,6 +6,6 @@ const userModel = require("./User/userModel")
 module.exports = {
     User: userModel,
     Applicant: applicantModel, 
-    Tchinical: technicalModel, 
+    Technical: technicalModel, 
     Admin: adminModel 
 }

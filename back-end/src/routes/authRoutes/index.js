@@ -19,7 +19,6 @@ router.post("/register", async (req, res) => {
     });
   }
 
-  // Pega enum do modelo pra validar typeUser
   const validTypeUsers = User.schema.path("typeUser").enumValues;
   if (!validTypeUsers.includes(typeUser)) {
     return response(res).error({
@@ -38,39 +37,27 @@ router.post("/register", async (req, res) => {
     }
 
     let user;
+    const baseData = {
+        name, 
+        email, 
+        password,
+        status: "active"
+    }
 
     switch (typeUser) {
       case "applicant":
         const { department } = req.body;
-        user = await Applicant.create({
-          name,
-          email,
-          password,
-          department,
-          status: "active"
-        });
+        user = await Applicant.create({...baseData, department});
         break;
 
       case "technical":
-        const { availability } = req.body;""
-        user = await Technical.create({
-          name,
-          email,
-          password,
-          availability,
-          status: "active"
-        });
+        const { availability } = req.body;
+        user = await Technical.create({...baseData, availability});
         break;
 
       case "admin":
         const { permissions } = req.body;
-        user = await Admin.create({
-          name,
-          email,
-          password,
-          permissions,
-          status: "active"
-        });
+        user = await Admin.create({...baseData, permissions});
         break;
     }
 

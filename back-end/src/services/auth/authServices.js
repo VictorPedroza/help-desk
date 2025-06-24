@@ -1,4 +1,5 @@
 const { User, Applicant, Technical, Admin } = require("../../models");
+const { Password } = require('../../utils')
 
 class AuthService {
     async register({ name, email, password, typeUser, ...extraFields }) {
@@ -7,10 +8,15 @@ class AuthService {
             return { success: false, message: "E-mail já cadastrado" }
         }
 
+        const hashPassword = await Password.hash(password)
+        if(!hashPassword.success) {
+            return { success: hashPassword.success, message: hashPassword.errors }
+        } 
+
         const baseData = {
             name,
             email,
-            password,
+            password: hashPassword.hash,
             status: "active",
         };
 

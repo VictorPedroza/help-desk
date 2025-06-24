@@ -1,9 +1,10 @@
 const bcrypt = require("bcrypt")
+require('dotenv').config()
 
-const SALT_ROUNDS = process.env.SALT_ROUNDS
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS)
 
 class Password {
-    static async hash(password) {
+    async hash(password) {
         try {
             const salt = await bcrypt.genSalt(SALT_ROUNDS)
             const hash = await bcrypt.hash(password, salt)
@@ -12,7 +13,7 @@ class Password {
             return { success: false, errors: "Erro ao realizar o Hash" }
         }
     }
-    static async compare(password, hashedPassword) {
+    async compare(password, hashedPassword) {
         try {
             const isMatch = await bcrypt.compare(password, hashedPassword)
             return {success: true, isMatch}
@@ -22,4 +23,4 @@ class Password {
     }
 }
 
-module.exports = { Password: new Password() }
+module.exports = new Password()

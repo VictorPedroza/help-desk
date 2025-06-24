@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { User } = require("../../models");
 const { response, typeError } = require("../../utils");
-const AuthService = require("../../services/auth/authServices")
+const { authService } = require("../../services")
 
 router.post("/register", async (req, res) => {
   const { name, email, password, typeUser, ...extraFields } = req.body;
@@ -29,7 +29,6 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    const authService = new AuthService;
     const result = await authService.register({
       name, 
       email,

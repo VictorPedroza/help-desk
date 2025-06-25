@@ -35,7 +35,7 @@ class AuthService {
 
         const user = await createUser({ ...baseData, ...extraFields });
 
-        return { success: true, data: user };
+        return { success: true, user: user };
     }
     async login({ email, password }) {
         const existUser = await User.findOne({ email });

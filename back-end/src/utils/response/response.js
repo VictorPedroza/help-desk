@@ -20,6 +20,16 @@ const response = (res) => ({
             timestamp: new Date().toISOString(),
             errors: errors
         })
+    },
+    server: (error) => {
+        return res.status(500).json({
+            status: "error",
+            statusCode: 500,
+            description: "Ocorreu um erro inesperado no servidor.",
+            message: "Erro interno do servidor",
+            timestamp: new Date().toISOString(),
+            errors: [process.env.NODE_END === "development" ? error.message : "Erro interno do servidor"]
+        })
     }
 });
 

@@ -1,16 +1,22 @@
+// Importações
 const { User } = require("../../models");
 const { response, typeError } = require("../../utils");
 const { AuthService } = require("../../services")
 
+// Classe de Controle de Autenticação
 class AuthController {
+    // Função para Registrar Usuário
     async register(req, res) {
+        // Entrada dos Valores de Registro
         const { name, email, password, typeUser, ...extraFields } = req.body;
 
+        // Verificação de quais valores estão nulos os vazios
         const fields = { name, email, password, typeUser };
         let errors = Object.entries(fields)
             .filter(([_, value]) => !value || (typeof value === "string" && value.trim() === ""))
             .map(([key]) => key);
 
+        // Caso haja algum valores obrigátorio que não tenha no req, envia na resposta quais estão faltando
         if (errors.length) {
             return response(res).error({
                 typeError: typeError.invalidCredentialsError,
@@ -18,6 +24,7 @@ class AuthController {
             });
         }
 
+        // Validação se o Tipo de Usuário está dentro dos parametros do Sistema
         const validTypeUsers = User.schema.path("typeUser").enumValues;
         if (!validTypeUsers.includes(typeUser)) {
             return response(res).error({
@@ -27,6 +34,7 @@ class AuthController {
         }
 
         try {
+            // Envia os valores para o registro para a função que realiza o cadastro
             const result = await AuthService.register({
                 name,
                 email,
@@ -35,6 +43,7 @@ class AuthController {
                 ...extraFields
             })
 
+            // Se o resultado do serviço de registro vier com erro, mostra e evidência qual foi o erro
             if (result.success === false) {
                 return response(res).error({
                     typeError: typeError.validationError,
@@ -42,22 +51,20 @@ class AuthController {
                 })
             }
 
-            const user = result.data;
+            const { user } = result;
 
             return response(res).success({
                 message: "Usuário cadastrado",
                 data: {
                     id: user._id,
                     name: user.name,
+                    email: user.email,
                     typeUser: user.typeUser
                 }
             });
 
         } catch (error) {
-            return response(res).error({
-                typeError: typeError.serverError,
-                errors: [process.env.NODE_ENV === 'development' ? error.message : typeError.serverError.message]
-            });
+            return response(res).server(error)
         }
     }
     async login(req, res) {
@@ -88,10 +95,7 @@ class AuthController {
             })
 
         } catch (error) {
-            return response(res).error({
-                typeError: typeError.serverError,
-                errors: [process.env.NODE_ENV === 'development' ? error.message : typeError.serverError.message]
-            })
+            return response(res).server(error)
         }
     }
     async logout(req, res) {
@@ -107,10 +111,7 @@ class AuthController {
                 data: {}
             })
         } catch (error) {
-            return response(res).error({
-                typeError: typeError.serverError,
-                errors: [process.env.NODE_ENV === 'development' ? error.message : typeError.serverError.message]
-            })
+            return response(res).server(error)
         }
     }
 }

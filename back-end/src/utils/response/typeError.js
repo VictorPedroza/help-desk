@@ -59,11 +59,6 @@ const typeError = {
     statusCode: 429,
     message: "Muitas requisições",
     description: "Você fez muitas requisições em um curto período. Tente novamente mais tarde."
-  },
-  serverError: {
-    statusCode: 500,
-    message: "Erro interno do servidor",
-    description: "Ocorreu um erro inesperado no servidor."
   }
 };
 

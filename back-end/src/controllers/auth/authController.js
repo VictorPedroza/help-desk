@@ -2,6 +2,8 @@ const { User } = require("../../models");
 const { response, typeError } = require("../../utils");
 const { AuthService } = require("../../services")
 
+const jwt = require("jsonwebtoken")
+
 class AuthController {
     async register(req, res) {
         const { name, email, password, typeUser, ...extraFields } = req.body;
@@ -60,6 +62,21 @@ class AuthController {
             });
         }
     }
+    async login(req, res) {
+        const { email, password } = req.body;
+
+        try {
+            return response(res).success({
+                message: "login Realizado",
+                data: dataUser
+            })
+        } catch (error) {
+            return response(res).error({
+                typeError: typeError.serverError,
+                errors: [error.message || error]
+            })
+        }
+    }
 }
 
-module.exports = {AuthController: new AuthController()};
+module.exports = { AuthController: new AuthController() };

@@ -56,7 +56,7 @@ class AuthController {
         } catch (error) {
             return response(res).error({
                 typeError: typeError.serverError,
-                errors: [error.message || error]
+                errors: [process.env.NODE_ENV === 'development' ? error.message : typeError.serverError.message]
             });
         }
     }
@@ -66,7 +66,7 @@ class AuthController {
         try {
             const result = await AuthService.login({ email, password })
 
-            if(result.status === false) {
+            if (result.status === false) {
                 return response(res).error({
                     typeError: typeError.invalidCredentialsError,
                     errors: [result.message]
@@ -90,7 +90,26 @@ class AuthController {
         } catch (error) {
             return response(res).error({
                 typeError: typeError.serverError,
-                errors: [error.message || error]
+                errors: [process.env.NODE_ENV === 'development' ? error.message : typeError.serverError.message]
+            })
+        }
+    }
+    async logout(req, res) {
+        try {
+            res.clearCookie("auth", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict"
+            });
+
+            return response(res).success({
+                massage: "Logout realizado.",
+                data: {}
+            })
+        } catch (error) {
+            return response(res).error({
+                typeError: typeError.serverError,
+                errors: [process.env.NODE_ENV === 'development' ? error.message : typeError.serverError.message]
             })
         }
     }

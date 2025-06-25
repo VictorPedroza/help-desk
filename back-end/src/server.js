@@ -3,11 +3,13 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser")
+const cors = require("cors")
 
 connectDB();
 
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
+app.use(cors());
 
 app.get("/", (req, res) => {
     res.send("API is Running");

@@ -45,10 +45,7 @@ class AuthService {
 
         const isValidPassword = await Password.compare(password, existUser.password);
         if (!isValidPassword.isMatch) {
-            return response(res).error({
-                typeError: typeError.invalidCredentialsError,
-                errors: [typeError.invalidCredentialsError.message]
-            })
+            return { status: false, message: "Credenciais Inválidas" }
         }
 
         const token = jwt.sign({
@@ -61,7 +58,7 @@ class AuthService {
             }
         );
 
-        const dataUser = {
+        const data = {
             user: {
                 id: existUser._id,
                 email: existUser.email,
@@ -70,7 +67,7 @@ class AuthService {
             token: token
         }
 
-        return dataUser
+        return data
     }
 }
 

@@ -2,8 +2,6 @@ const { User } = require("../../models");
 const { response, typeError } = require("../../utils");
 const { AuthService } = require("../../services")
 
-const jwt = require("jsonwebtoken")
-
 class AuthController {
     async register(req, res) {
         const { name, email, password, typeUser, ...extraFields } = req.body;
@@ -66,10 +64,20 @@ class AuthController {
         const { email, password } = req.body;
 
         try {
+            const result = await AuthService.login({ email, password })
+
+            if(result.status === false) {
+                return response(res).error({
+                    typeError: typeError.invalidCredentialsError,
+                    errors: [result.message]
+                })
+            }
+
             return response(res).success({
-                message: "login Realizado",
-                data: dataUser
+                message: "Login realizado",
+                data: result
             })
+
         } catch (error) {
             return response(res).error({
                 typeError: typeError.serverError,

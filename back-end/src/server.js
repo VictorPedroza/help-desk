@@ -2,10 +2,12 @@
 const express = require("express");
 const app = express();
 const connectDB = require("./config/db");
+const cookieParser = require("cookie-parser")
 
 connectDB();
 
 app.use(express.json());
+app.use(cookieParser())
 
 app.get("/", (req, res) => {
     res.send("API is Running");

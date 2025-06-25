@@ -73,9 +73,18 @@ class AuthController {
                 })
             }
 
+            const { user, token } = result;
+
+            res.cookie("auth", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 3600000
+            })
+
             return response(res).success({
                 message: "Login realizado",
-                data: result
+                data: user
             })
 
         } catch (error) {

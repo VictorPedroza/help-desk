@@ -14,5 +14,6 @@ router.post('/login', AuthController.login)
 // Rota de Logou
 router.get('/logout', AuthController.logout)
 
+router.get("/check", AuthController.check)
 // Exportação
 module.exports = router;

@@ -69,6 +69,22 @@ class AuthService {
 
         return data
     }
+    async verifyToken(token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            return {
+                success: true,
+                user: {
+                    id: decoded.userId,
+                    email: decoded.email,
+                    typeUser: decoded.typeUser
+                }
+            }
+        } catch(error) {
+            return { success: false }
+        }
+    }
 }
 
 module.exports = new AuthService;

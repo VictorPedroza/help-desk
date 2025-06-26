@@ -1,22 +1,25 @@
 import { Outlet } from "react-router-dom"
 
 export const AuthLayout = () => {
-    return(
-        <div 
+    return (
+        <div
             className="
                 grid 
                 grid-cols-1 
-                sm:grid-cols-[500px_1fr]
+                lg:grid-cols-[400px_1fr]
+                h-full
             "
         >
             {/* Área de formulário */}
-            <div className="bg-gray-50 p-2 border-r-[1px] border-black/20 shadow min-h-[650px]">
+            <div className="bg-gray-50 p-2 border-r-[1px] border-black/20 shadow h-full">
                 <Outlet />
             </div>
 
             {/* Área secundária que some no mobile */}
-            <div className="p-2 hidden sm:flex">
-                Test 2
+            <div className="hidden lg:flex">
+                <div className="h-full w-full flex justify-center items-center overflow-hidden">
+                    <img src="public/vetor2.jpg" alt="Imagem ilustrativa" className="h-[80%] w-[80%] overflow-hidden flex justify-center items-center" />
+                </div>
             </div>
         </div>
     )

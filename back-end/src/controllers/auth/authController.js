@@ -1,7 +1,8 @@
 // Importações
 const { User } = require("../../models");
 const { response, typeError } = require("../../utils");
-const { AuthService } = require("../../services")
+const { AuthService } = require("../../services");
+const authServices = require("../../services/auth/authServices");
 
 // Classe de Controle de Autenticação
 class AuthController {
@@ -114,6 +115,37 @@ class AuthController {
                 data: {}
             })
         } catch (error) {
+            return response(res).server(error)
+        }
+    }
+    async check(req, res) {
+        const token = req.cookies.auth;
+
+        try {
+            if(!token) {
+                return response(res).error({
+                    typeError: typeError.authenticationError,
+                    errors: [ typeError.authenticationError.message ]
+                })
+            }
+
+            const result = await authServices.verifyToken(token);
+
+            if(!result.success) {
+                return response(res).error({
+                    typeError: typeError.authenticationError,
+                    errors: [ typeError.authenticationError.message ]
+                })
+            }
+
+            return response(res).success({
+                message: "Usuário autenticado",
+                data: result.user
+            })
+
+
+
+        } catch(error) {
             return response(res).server(error)
         }
     }

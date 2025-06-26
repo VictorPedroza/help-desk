@@ -50,9 +50,11 @@ class AuthController {
                     errors: [result.message]
                 })
             }
-
+            
+            // Definição do User basedo no Result do Service
             const { user } = result;
 
+            // Retorna mensagem de Sucesso
             return response(res).success({
                 message: "Usuário cadastrado",
                 data: {
@@ -64,6 +66,7 @@ class AuthController {
             });
 
         } catch (error) {
+            // Erro no Servidor
             return response(res).server(error)
         }
     }

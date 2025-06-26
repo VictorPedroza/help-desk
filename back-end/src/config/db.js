@@ -1,9 +1,11 @@
-// db.js
+// Importaçõe e Configurações
 const mongoose = require("mongoose");
 require("dotenv").config(); // Carrega variáveis do .env
 
+// URi do BD
 const MONGO_URI = process.env.MONGO_URi;
 
+// Função de Conexão
 function connectDB() {
     mongoose.connect(MONGO_URI)
     .then(() => console.log("🟢 Conectado ao MongoDB"))

@@ -50,6 +50,7 @@ class AuthService {
 
         const token = jwt.sign({
             userId: existUser._id,
+            name: existUser.name,
             email: existUser.email,
             typeUser: existUser.__t
         }, process.env.JWT_SECRET,
@@ -77,6 +78,7 @@ class AuthService {
                 success: true,
                 user: {
                     id: decoded.userId,
+                    name: decoded.name,
                     email: decoded.email,
                     typeUser: decoded.typeUser
                 }

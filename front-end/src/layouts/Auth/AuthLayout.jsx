@@ -18,7 +18,7 @@ export const AuthLayout = () => {
             {/* Área secundária que some no mobile */}
             <div className="hidden lg:flex">
                 <div className="h-full w-full flex justify-center items-center overflow-hidden">
-                    <img src="public/vetor2.jpg" alt="Imagem ilustrativa" className="h-[80%] w-[80%] overflow-hidden flex justify-center items-center" />
+                    <img src="public/ilustrator.jpg" alt="Imagem ilustrativa" className="h-[80%] w-[80%] overflow-hidden flex justify-center items-center" />
                 </div>
             </div>
         </div>

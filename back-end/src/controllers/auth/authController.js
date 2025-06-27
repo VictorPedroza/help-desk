@@ -110,12 +110,14 @@ class AuthController {
     }
     async logout(req, res) {
         try {
+            // Limpando cookes
             res.clearCookie("auth", {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "strict"
             });
 
+            // Retorno com sucesso
             return response(res).success({
                 massage: "Logout realizado.",
                 data: {}
@@ -125,9 +127,11 @@ class AuthController {
         }
     }
     async check(req, res) {
+        // Puxa valor do cookies para checagem
         const token = req.cookies.auth;
 
         try {
+            // Retorno inválido caso não tenha o token
             if(!token) {
                 return response(res).error({
                     typeError: typeError.authenticationError,
@@ -135,8 +139,10 @@ class AuthController {
                 })
             }
 
+            // Serviço para verificar se o token é valido
             const result = await authServices.verifyToken(token);
 
+            // Retorno caso o token for inválido
             if(!result.success) {
                 return response(res).error({
                     typeError: typeError.authenticationError,
@@ -144,6 +150,8 @@ class AuthController {
                 })
             }
 
+
+            // Retorno com sucesso
             return response(res).success({
                 message: "Usuário autenticado",
                 data: result.user

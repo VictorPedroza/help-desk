@@ -3,17 +3,23 @@ const { Password } = require('../../utils')
 const jwt = require('jsonwebtoken')
 
 class AuthService {
+    // Serviço de Login
     async register({ name, email, password, typeUser, ...extraFields }) {
+        // Buscando se já existe e-mail
         const userExists = await User.findOne({ email });
         if (userExists) {
+            // Retorna erro caso já tenha
             return { success: false, message: "E-mail já cadastrado" }
         }
 
+        // Encripta a senha
         const hashPassword = await Password.hash(password)
         if (!hashPassword.success) {
+            // Se houver erro, retorna o erro
             return { success: hashPassword.success, message: hashPassword.errors }
         }
 
+        // Valores de base para o cadastro
         const baseData = {
             name,
             email,
@@ -21,20 +27,25 @@ class AuthService {
             status: "active",
         };
 
+        // Uso baseado no typeUser
         const userFactories = {
             applicant: (data) => Applicant.create(data),
             technical: (data) => Technical.create(data),
             admin: (data) => Admin.create(data),
         };
 
+        // Cria usando o usuário
         const createUser = userFactories[typeUser.toLowerCase()];
 
+        // Se houver erro no Factory de Criação do Usuário
         if (!createUser) {
             return { success: false, message: "Tipo de Usuário inválido." }
         }
 
+        // Cria o usuário
         const user = await createUser({ ...baseData, ...extraFields });
 
+        // Retorna o usuário
         return { success: true, user: user };
     }
     async login({ email, password }) {

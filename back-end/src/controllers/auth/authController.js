@@ -157,8 +157,6 @@ class AuthController {
                 data: result.user
             })
 
-
-
         } catch(error) {
             return response(res).server(error)
         }

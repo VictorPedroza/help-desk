@@ -72,11 +72,14 @@ class AuthController {
         }
     }
     async login(req, res) {
+        // Recebendo os valore para login
         const { email, password } = req.body;
 
         try {
+            // Resultado do Serice de Login
             const result = await AuthService.login({ email, password })
 
+            // Caso o resultado for um erro, retorna com o erro de credenciais inválidas
             if (result.status === false) {
                 return response(res).error({
                     typeError: typeError.invalidCredentialsError,
@@ -84,16 +87,18 @@ class AuthController {
                 })
             }
 
+            // Retorno com sucesso, e o token para autenticação
             const { user, token } = result;
 
+            // Gerando os Cookies
             res.cookie("auth", token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "strict",
                 maxAge: 3600000
             })
-            console.log(token)
 
+            // Retorno com sucesso
             return response(res).success({
                 message: "Login realizado",
                 data: user

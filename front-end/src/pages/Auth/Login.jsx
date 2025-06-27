@@ -1,49 +1,38 @@
+import axios from 'axios';
+
 export const Login = () => {
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Aqui você trata o login (ex: valida, envia pro backend etc)
-        console.log("Login enviado!");
-    };
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Evita recarregar a página
 
-    return (
-        <div className="p-4 max-w-md mx-auto flex flex-col ">
-            <div className="text-center">
-                <h1 className="text-2xl font-bold mb-4">Login</h1>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label htmlFor="email" className="block mb-1 text-sm font-medium">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        className="w-full border border-gray-300 p-2 rounded"
-                        required
-                    />
-                </div>
+    try {
+      const response = await axios.post('http://localhost:8088/api/auth/login', {
+        email: "admin@admin.com",
+        password: "admin"
+      },{
+        withCredentials: true
+      });
+      console.log('Resposta da API:', response.data);
+    } catch (error) {
+      if(error.response.status === 401) {
+        console.errors(error.response.message)
+      }
+    }
+  };
 
-                <div>
-                    <label htmlFor="password" className="block mb-1 text-sm font-medium">
-                        Senha
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        className="w-full border border-gray-300 p-2 rounded"
-                        required
-                    />
-                </div>
+  return (
+    <div className="h-full w-full bg-red-200 flex flex-col items-center justify-center">
+      <div className="bg-white w-full p-2 flex justify-center items-center">
+        <h1 className="text-2xl font-bold font-sans uppercase">Login</h1>
+      </div>
 
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                >
-                    Entrar
-                </button>
-            </form>
-        </div>
-    );
+      <form onSubmit={handleLogin}>
+        <button
+          type="submit"
+          className="bg-orange-500 px-4 py-2 text-xl rounded-lg shadow text-white font-bold mt-4"
+        >
+          Entrar
+        </button>
+      </form>
+    </div>
+  );
 };

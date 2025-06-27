@@ -92,6 +92,7 @@ class AuthController {
                 sameSite: "strict",
                 maxAge: 3600000
             })
+            console.log(token)
 
             return response(res).success({
                 message: "Login realizado",
